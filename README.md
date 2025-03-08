@@ -37,7 +37,49 @@ STEP 5:Normalizing the data<BR>
 STEP 6:Splitting the data into test and train<BR>
 
 ##  PROGRAM:
-TYPE YOUR CODE HERE
+
+# Import Libraries
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+
+# Read the dataset
+df = pd.read_csv("Churn_Modelling.csv")
+
+# Handling Missing Values
+print("Missing Values:\n", df.isnull().sum(), "\n")
+
+# Handle duplicates (if any)
+duplicates = df.duplicated().sum()
+print(f"Number of duplicate rows: {duplicates}\n")
+
+# Check for Outliers using describe()
+print("Outliers (Summary Statistics):\n", df.describe(), "\n")
+
+# Drop unnecessary columns (like 'Surname', 'Geography', and 'Gender')
+df = df.drop(['Surname', 'Geography', 'Gender'], axis=1)
+
+# Normalize the dataset using MinMaxScaler
+scaler = MinMaxScaler()
+df_normalized = pd.DataFrame(scaler.fit_transform(df.drop('Exited', axis=1)), columns=df.columns[:-1])
+
+# Normalized dataset
+print("Normalized dataset:\n", df_normalized.head(), "\n")
+
+# Define features (X) and target (y)
+X = df_normalized.values
+y = df['Exited'].values
+
+# Input & Output Values
+print("Input Values (Features):\n", X[:5])  # Show first 5 rows of features
+print("\nOutput Values (Target):\n", y[:5])  # Show first 5 values of target
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+## Splitting the data for training & testing
+print(f"\nTraining data size: {len(X_train)}")
+print(f"Testing data size: {len(X_test)}")
 
 
 ## OUTPUT:
